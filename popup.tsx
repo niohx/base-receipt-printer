@@ -1,8 +1,17 @@
-import { useState } from "react"
+import { Button } from "antd";
+import { useEffect, useState } from "react"
+import { Storage } from "@plasmohq/storage"
 
-function IndexPopup() {
-  const [data, setData] = useState("")
 
+const IndexPopup:React.FC=()=> {
+  const [data, setData] = useState(null)
+  useEffect(()=>{
+    const strage = new Storage()
+    
+    strage.get("ip").then((res)=>{
+      console.log(res)
+      setData(res)})
+  });
   return (
     <div
       style={{
@@ -11,17 +20,19 @@ function IndexPopup() {
         padding: 16
       }}>
       <h2>
-        Welcome to your{" "}
-        <a href="https://www.plasmo.com" target="_blank">
-          Plasmo
-        </a>{" "}
-        Extension!
+        Please Enter Your Printer IP Address<p/>
+        <p/>
+        now save on {data!=null?data:"no data saved"}
+        <p/>
+        
       </h2>
       <input onChange={(e) => setData(e.target.value)} value={data} />
-      <a href="https://docs.plasmo.com" target="_blank">
-        View Docs
-      </a>
+      <Button onClick={()=>{
+        const storage = new Storage()
+        storage.set("ip",data)
+      }}>save</Button>
     </div>
+    
   )
 }
 
